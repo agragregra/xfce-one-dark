@@ -4,12 +4,12 @@ One Dark theme for Xfce based on Arc-Dark.
 
 ## Installation
 
-` ` `
+```
 git clone https://github.com/alex/xfce-one-dark.git
 cd xfce-one-dark
 chmod +x run.sh
 sudo ./run.sh install
-` ` `
+```
 
 Then manually apply theme in Xfce:
 - Settings Manager -> Appearance -> Arc-Dark
@@ -18,19 +18,19 @@ Then manually apply theme in Xfce:
 ## Usage
 
 Add custom styles:
-` ` `
+```
 sudo ./run.sh add
-` ` `
+```
 
 Remove custom styles:
-` ` `
+```
 sudo ./run.sh remove
-` ` `
+```
 
 Uninstall theme and icons:
-` ` `
+```
 sudo ./run.sh uninstall
-` ` `
+```
 
 ## Files
 
