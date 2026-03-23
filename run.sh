@@ -42,10 +42,8 @@ case "$1" in
         add_import
         echo ""
         echo "To apply theme in XFCE:"
-        echo "1. Open Settings Manager → Appearance"
-        echo "2. Select Arc-Dark theme"
-        echo "3. Open Settings Manager → Icons"
-        echo "4. Select Papirus-Dark icons"
+        echo "1. Settings Manager -> Appearance -> Arc-Dark"
+        echo "2. Settings Manager -> Icons -> Papirus-Dark"
         ;;
     add)
         check_sudo "$@"
