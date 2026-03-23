@@ -2516,7 +2516,7 @@ panel-toplevel.background #PanelApplet label, panel-toplevel.background #PanelAp
 }
 
 .xfce4-panel.panel {
-    background-color: alpha(@one-dark-border, 0.95);
+    background-color: alpha(@one-dark-border, 1);
 }
 
 .xfce4-panel.panel widget {
