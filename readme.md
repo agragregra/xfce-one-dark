@@ -5,7 +5,7 @@ One Dark theme for Xfce based on Arc-Dark.
 ## Installation
 
 ```
-git clone https://github.com/alex/xfce-one-dark.git
+git clone https://github.com/alex/xfce-one-dark
 cd xfce-one-dark
 chmod +x run.sh
 sudo ./run.sh install
