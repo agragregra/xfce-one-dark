@@ -1757,7 +1757,7 @@ filechooser #pathbarbox {
 }
 
 .sidebar {
-    background-color: @one-dark-bg-dark;
+    background-color: @one-dark-bg-lighter;
 }
 
 stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list,
