@@ -5,21 +5,23 @@ CURRENT_DIR="$(pwd)"
 IMPORT_LINE="@import url(\"file://${CURRENT_DIR}/styles.css\");"
 
 if command -v apt &> /dev/null; then
-  INSTALL_CMD="apt update && apt install -y"
-  REMOVE_CMD="apt remove --purge -y"
+  PKG_MANAGER="apt"
   THEME_PKG="arc-theme"
   ICON_PKG="papirus-icon-theme"
 elif command -v pacman &> /dev/null; then
+  PKG_MANAGER="pacman"
   INSTALL_CMD="pacman -Sy --noconfirm"
   REMOVE_CMD="pacman -Rns --noconfirm"
   THEME_PKG="arc-gtk-theme"
   ICON_PKG="papirus-icon-theme"
 elif command -v dnf &> /dev/null; then
+  PKG_MANAGER="dnf"
   INSTALL_CMD="dnf install -y"
   REMOVE_CMD="dnf remove -y"
   THEME_PKG="arc-theme"
   ICON_PKG="papirus-icon-theme"
 elif command -v zypper &> /dev/null; then
+  PKG_MANAGER="zypper"
   INSTALL_CMD="zypper install -y"
   REMOVE_CMD="zypper remove -y"
   THEME_PKG="arc-theme"
@@ -51,7 +53,12 @@ remove_import() {
 case "$1" in
   install)
     check_sudo "$@"
-    $INSTALL_CMD $THEME_PKG $ICON_PKG
+    if [ "$PKG_MANAGER" = "apt" ]; then
+      apt update
+      apt install -y $THEME_PKG $ICON_PKG
+    else
+      $INSTALL_CMD $THEME_PKG $ICON_PKG
+    fi
     add_import
     ;;
   add)
@@ -64,7 +71,11 @@ case "$1" in
     ;;
   uninstall)
     check_sudo "$@"
-    $REMOVE_CMD $THEME_PKG $ICON_PKG
+    if [ "$PKG_MANAGER" = "apt" ]; then
+      apt remove --purge -y $THEME_PKG $ICON_PKG
+    else
+      $REMOVE_CMD $THEME_PKG $ICON_PKG
+    fi
     ;;
   *)
     echo "Usage: ./run.sh {install|add|remove|uninstall}"
