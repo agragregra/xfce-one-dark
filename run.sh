@@ -40,14 +40,22 @@ check_sudo() {
 
 add_import() {
   chmod 666 "$GTK_CSS"
-  sed -i "1a\\$IMPORT_LINE" "$GTK_CSS"
-  echo "Added"
+  if ! grep -q "styles.css" "$GTK_CSS"; then
+    sed -i "1a\\$IMPORT_LINE" "$GTK_CSS"
+    echo "Added"
+  else
+    echo "Already exists"
+  fi
 }
 
 remove_import() {
   chmod 666 "$GTK_CSS"
-  sed -i '2d' "$GTK_CSS"
-  echo "Removed"
+  if grep -q "styles.css" "$GTK_CSS"; then
+    sed -i "/styles.css/d" "$GTK_CSS"
+    echo "Removed"
+  else
+    echo "Not found"
+  fi
 }
 
 case "$1" in
