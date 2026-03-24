@@ -10,6 +10,7 @@ git clone https://github.com/agragregra/xfce-one-dark && cd xfce-one-dark && rm 
 
 Then manually apply theme in Xfce:
 - Settings -> Appearance -> Arc-Dark
+- Settings -> Appearance -> Fonts -> Default Font -> Noto Sans Regular 9
 - Settings -> Icons -> Papirus-Dark
 - Settings -> Desktop -> Style: None -> Color: `#1A1E23`
 
