@@ -13,8 +13,9 @@ sudo ./run.sh install
 ````
 
 Then manually apply theme in Xfce:
-- Settings Manager -> Appearance -> Arc-Dark
-- Settings Manager -> Icons -> Papirus-Dark
+- Settings -> Appearance -> Arc-Dark
+- Settings -> Icons -> Papirus-Dark
+- Settings -> Desktop -> Style: None -> Color: #1A1E23
 
 ## Usage
 
