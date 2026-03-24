@@ -57,8 +57,8 @@ case "$1" in
     add_import
     echo -e "\nTo apply theme in XFCE:"
     echo "1. Settings -> Appearance -> Arc-Dark"
-    echo "2. Settings -> Icons -> Papirus-Dark"
     echo "3. Settings -> Appearance -> Fonts -> Default Font -> Noto Sans Regular 9"
+    echo "2. Settings -> Icons -> Papirus-Dark"
     echo "4. Settings -> Desktop -> Style: None -> Color: #1A1E23"
     ;;
   add)
