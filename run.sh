@@ -4,43 +4,43 @@ GTK_CSS="/usr/share/themes/Arc-Dark/gtk-3.0/gtk.css"
 CURRENT_DIR="$(pwd)"
 IMPORT_LINE="@import url(\"file://${CURRENT_DIR}/styles.css\");"
 
+# Определяем команды для пакетного менеджера
 if command -v apt &> /dev/null; then
-  PKG_MANAGER="apt"
+  INSTALL_CMD="apt update && apt install -y"
+  REMOVE_CMD="apt remove --purge -y"
   THEME_PKG="arc-theme"
   ICON_PKG="papirus-icon-theme"
+  FONT_PKG="fonts-noto-core"
 elif command -v pacman &> /dev/null; then
-  PKG_MANAGER="pacman"
   INSTALL_CMD="pacman -Sy --noconfirm"
   REMOVE_CMD="pacman -Rns --noconfirm"
   THEME_PKG="arc-gtk-theme"
   ICON_PKG="papirus-icon-theme"
+  FONT_PKG="noto-fonts"
 elif command -v dnf &> /dev/null; then
-  PKG_MANAGER="dnf"
   INSTALL_CMD="dnf install -y"
   REMOVE_CMD="dnf remove -y"
   THEME_PKG="arc-theme"
   ICON_PKG="papirus-icon-theme"
+  FONT_PKG="google-noto-sans-fonts"
 elif command -v zypper &> /dev/null; then
-  PKG_MANAGER="zypper"
   INSTALL_CMD="zypper install -y"
   REMOVE_CMD="zypper remove -y"
   THEME_PKG="arc-theme"
   ICON_PKG="papirus-icon-theme"
+  FONT_PKG="google-noto-fonts"
 else
   echo "No supported package manager found"
   exit 1
 fi
 
 check_sudo() {
-  if [ "$EUID" -ne 0 ]; then
-    exec sudo "$0" "$@"
-  fi
+  [ "$EUID" -ne 0 ] && exec sudo "$0" "$@"
 }
 
 add_import() {
   chmod 666 "$GTK_CSS"
-  sed -i "1a\\
-$IMPORT_LINE" "$GTK_CSS"
+  sed -i "1a\\$IMPORT_LINE" "$GTK_CSS"
   echo "Added"
 }
 
@@ -53,18 +53,13 @@ remove_import() {
 case "$1" in
   install)
     check_sudo "$@"
-    if [ "$PKG_MANAGER" = "apt" ]; then
-      apt update
-      apt install -y $THEME_PKG $ICON_PKG
-    else
-      $INSTALL_CMD $THEME_PKG $ICON_PKG
-    fi
+    eval "$INSTALL_CMD $THEME_PKG $ICON_PKG $FONT_PKG"
     add_import
-    echo ""
-    echo "To apply theme in XFCE:"
+    echo -e "\nTo apply theme in XFCE:"
     echo "1. Settings -> Appearance -> Arc-Dark"
     echo "2. Settings -> Icons -> Papirus-Dark"
-    echo "3. Settings -> Desktop -> Style: None -> Color: #1A1E23"
+    echo "3. Settings -> Appearance -> Fonts -> Default Font -> Noto Sans Regular 9"
+    echo "4. Settings -> Desktop -> Style: None -> Color: #1A1E23"
     ;;
   add)
     check_sudo "$@"
@@ -76,11 +71,7 @@ case "$1" in
     ;;
   uninstall)
     check_sudo "$@"
-    if [ "$PKG_MANAGER" = "apt" ]; then
-      apt remove --purge -y $THEME_PKG $ICON_PKG
-    else
-      $REMOVE_CMD $THEME_PKG $ICON_PKG
-    fi
+    eval "$REMOVE_CMD $THEME_PKG $ICON_PKG"
     ;;
   *)
     echo "Usage: ./run.sh {install|add|remove|uninstall}"
