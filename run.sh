@@ -4,62 +4,70 @@ GTK_CSS="/usr/share/themes/Arc-Dark/gtk-3.0/gtk.css"
 CURRENT_DIR="$(pwd)"
 IMPORT_LINE="@import url(\"file://${CURRENT_DIR}/styles.css\");"
 
+if command -v apt &> /dev/null; then
+  INSTALL_CMD="apt update && apt install -y"
+  REMOVE_CMD="apt remove --purge -y"
+  THEME_PKG="arc-theme"
+  ICON_PKG="papirus-icon-theme"
+elif command -v pacman &> /dev/null; then
+  INSTALL_CMD="pacman -Sy --noconfirm"
+  REMOVE_CMD="pacman -Rns --noconfirm"
+  THEME_PKG="arc-gtk-theme"
+  ICON_PKG="papirus-icon-theme"
+elif command -v dnf &> /dev/null; then
+  INSTALL_CMD="dnf install -y"
+  REMOVE_CMD="dnf remove -y"
+  THEME_PKG="arc-theme"
+  ICON_PKG="papirus-icon-theme"
+elif command -v zypper &> /dev/null; then
+  INSTALL_CMD="zypper install -y"
+  REMOVE_CMD="zypper remove -y"
+  THEME_PKG="arc-theme"
+  ICON_PKG="papirus-icon-theme"
+else
+  echo "No supported package manager found"
+  exit 1
+fi
+
 check_sudo() {
-    if [ "$EUID" -ne 0 ]; then
-        exec sudo "$0" "$@"
-    fi
+  if [ "$EUID" -ne 0 ]; then
+    exec sudo "$0" "$@"
+  fi
 }
 
 add_import() {
-    if [ ! -f "$GTK_CSS" ]; then
-        echo "Error: $GTK_CSS not found"
-        exit 1
-    fi
-    cp "$GTK_CSS" "${GTK_CSS}.backup"
-    chmod 666 "$GTK_CSS"
-    sed -i "1a\\
+  chmod 666 "$GTK_CSS"
+  sed -i "1a\\
 $IMPORT_LINE" "$GTK_CSS"
-    echo "Added"
+  echo "Added"
 }
 
 remove_import() {
-    if [ ! -f "$GTK_CSS" ]; then
-        echo "Error: $GTK_CSS not found"
-        exit 1
-    fi
-    cp "$GTK_CSS" "${GTK_CSS}.backup"
-    chmod 666 "$GTK_CSS"
-    sed -i '2d' "$GTK_CSS"
-    echo "Removed"
+  chmod 666 "$GTK_CSS"
+  sed -i '2d' "$GTK_CSS"
+  echo "Removed"
 }
 
 case "$1" in
-    install)
-        check_sudo "$@"
-        apt update
-        apt install -y arc-theme papirus-icon-theme
-        echo "Installed Arc-Dark theme and Papirus-Dark icons"
-        add_import
-        echo ""
-        echo "To apply theme in XFCE:"
-        echo "1. Settings -> Appearance -> Arc-Dark"
-        echo "2. Settings -> Icons -> Papirus-Dark"
-        echo "3. Settings -> Desktop -> Style: None -> Color: #1A1E23"
-        ;;
-    add)
-        check_sudo "$@"
-        add_import
-        ;;
-    remove)
-        check_sudo "$@"
-        remove_import
-        ;;
-    uninstall)
-        check_sudo "$@"
-        apt remove --purge arc-theme papirus-icon-theme -y
-        ;;
-    *)
-        echo "Usage: ./run.sh {install|add|remove|uninstall}"
-        exit 1
-        ;;
+  install)
+    check_sudo "$@"
+    $INSTALL_CMD $THEME_PKG $ICON_PKG
+    add_import
+    ;;
+  add)
+    check_sudo "$@"
+    add_import
+    ;;
+  remove)
+    check_sudo "$@"
+    remove_import
+    ;;
+  uninstall)
+    check_sudo "$@"
+    $REMOVE_CMD $THEME_PKG $ICON_PKG
+    ;;
+  *)
+    echo "Usage: ./run.sh {install|add|remove|uninstall}"
+    exit 1
+    ;;
 esac
