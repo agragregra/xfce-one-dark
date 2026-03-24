@@ -60,6 +60,11 @@ case "$1" in
       $INSTALL_CMD $THEME_PKG $ICON_PKG
     fi
     add_import
+    echo ""
+    echo "To apply theme in XFCE:"
+    echo "1. Settings -> Appearance -> Arc-Dark"
+    echo "2. Settings -> Icons -> Papirus-Dark"
+    echo "3. Settings -> Desktop -> Style: None -> Color: #1A1E23"
     ;;
   add)
     check_sudo "$@"
